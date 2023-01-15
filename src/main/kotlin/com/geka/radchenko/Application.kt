@@ -1,5 +1,6 @@
 package com.geka.radchenko
 
+import com.geka.radchenko.feature.login.configureLoginRouting
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
@@ -12,4 +13,7 @@ fun main() {
 
 fun Application.module() {
     configureRouting()
+    configureLoginRouting()
+
+    configureSerialization()
 }

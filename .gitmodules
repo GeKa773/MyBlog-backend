@@ -1,0 +1,3 @@
+[submodule "MyBlog-commons"]
+	path = MyBlog-commons
+	url = https://github.com/GeKa773/MyBlog-commons.git
