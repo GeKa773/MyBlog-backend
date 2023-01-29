@@ -14,18 +14,7 @@ import java.util.*
 fun Application.configureLoginRouting() {
     routing() {
         post("/login") {
-            val receive = call.receive<LoginRequestRemote>()
-            val first = InMemoryCache.userList.firstOrNull { it.login == receive.login }
-
-            when {
-                first == null -> call.respond(HttpStatusCode.BadRequest, "User not found")
-                first.password != receive.password -> call.respond(HttpStatusCode.BadRequest, "Invalid password")
-                else -> {
-                    val token = UUID.randomUUID().toString()
-                    InMemoryCache.token.add(TokenCache(login = first.login, email = first.email, token = token))
-                    call.respond(LoginResponseRemote(login = first.login, email = first.email, token))
-                }
-            }
+            LoginController(call).performLogin()
         }
     }
 
