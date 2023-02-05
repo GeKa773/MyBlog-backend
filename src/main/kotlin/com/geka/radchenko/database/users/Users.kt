@@ -41,4 +41,6 @@ object Users : Table() {
         }
     }
 
+    fun emptyUser() = UserDTO(login = "null", password = "null", username = "null", email = "null", icon = "null")
+
 }
