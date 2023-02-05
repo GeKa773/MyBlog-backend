@@ -1,5 +1,6 @@
 package com.geka.radchenko
 
+import com.geka.radchenko.feature.blog.configureBlogsRouting
 import com.geka.radchenko.feature.login.configureLoginRouting
 import com.geka.radchenko.feature.register.configureRegisterRouting
 import io.ktor.server.application.*
@@ -16,6 +17,7 @@ fun main() {
         user = "postgres",
         password = "1122"
     )
+
     embeddedServer(Netty, port = 8080, host = "0.0.0.0", module = Application::module)
         .start(wait = true)
 }
@@ -24,6 +26,6 @@ fun Application.module() {
     configureRouting()
     configureLoginRouting()
     configureRegisterRouting()
-
     configureSerialization()
+    configureBlogsRouting()
 }

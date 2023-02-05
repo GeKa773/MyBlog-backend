@@ -89,4 +89,13 @@ object Blogs : Table() {
         }
     }
 
+    fun getBlogIdForInsert(): Int? {
+        return try {
+            transaction {
+                Blogs.selectAll().toList().size + 1
+            }
+        } catch (e: Exception) {
+            null
+        }
+    }
 }

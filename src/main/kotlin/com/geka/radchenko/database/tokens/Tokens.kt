@@ -1,5 +1,9 @@
 package com.geka.radchenko.database.tokens
 
+import com.geka.radchenko.utils.TokenCheck
+import io.ktor.http.*
+import io.ktor.server.application.*
+import io.ktor.server.response.*
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
@@ -22,4 +26,19 @@ object Tokens : Table() {
         }
     }
 
+    fun fetchToken(myToken: String): TokenDTO? {
+        return try {
+            transaction {
+                Tokens.select { Tokens.token.eq(myToken) }.firstOrNull()?.let {
+                    TokenDTO(
+                        rowId = it[Tokens.id],
+                        login = it[Tokens.login],
+                        token = it[Tokens.token],
+                    )
+                }
+            }
+        } catch (e: Exception) {
+            null
+        }
+    }
 }
