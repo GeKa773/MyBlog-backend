@@ -2,10 +2,8 @@ package com.geka.radchenko.database.blogs
 
 import com.geka.radchenko.database.users.UserDTO
 import com.geka.radchenko.database.users.Users
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
 
 object Blogs : Table() {
@@ -92,10 +90,32 @@ object Blogs : Table() {
     fun getBlogIdForInsert(): Int? {
         return try {
             transaction {
-                Blogs.selectAll().toList().size + 1
+                val last = Blogs.selectAll().toList().lastOrNull()
+                if (last == null) {
+                    0
+                } else {
+                    last[Blogs.id] + 1
+                }
             }
         } catch (e: Exception) {
             null
+        }
+    }
+
+    fun deleteBlog(blogId: Int): Boolean {
+        return try {
+            transaction {
+                val blog = Blogs.select { Blogs.id.eq(blogId) }.firstOrNull()
+                if (blog == null) {
+                    false
+                } else {
+                    Blogs.deleteWhere { Blogs.id.eq(blogId) }
+                    true
+                }
+            }
+
+        } catch (e: Exception) {
+            false
         }
     }
 }
